@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  database:
+    image: postgres
+    container_name: Database
+    environment:
+      POSTGRES_DB: ${DATASOURCE_DB}
+      POSTGRES_USER: ${DATASOURCE_USER}
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  wallet:
+    image: wallet-control
+    container_name: Application
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
