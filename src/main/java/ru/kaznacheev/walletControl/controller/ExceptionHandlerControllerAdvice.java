@@ -2,11 +2,13 @@ package ru.kaznacheev.walletControl.controller;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kaznacheev.walletControl.dto.ValidationViolation;
-import ru.kaznacheev.walletControl.dto.ValidationViolationsResponse;
+import ru.kaznacheev.walletControl.dto.response.BaseExceptionDto;
+import ru.kaznacheev.walletControl.dto.response.ValidationExceptionDto;
+import ru.kaznacheev.walletControl.exception.BaseApiException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,27 +20,34 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationViolationsResponse onConstraintViolationException(ConstraintViolationException e) {
-        Map<String, List<String>> violations = new HashMap<>();
+    public ValidationExceptionDto onConstraintViolationException(ConstraintViolationException e) {
+        Map<String, List<String>> invalidFields = new HashMap<>();
         e.getConstraintViolations().forEach(constraintViolation -> {
             String fieldPath = constraintViolation.getPropertyPath().toString();
-            String field = fieldPath.substring(fieldPath.lastIndexOf(".") + 1);
-            if (violations.containsKey(field)) {
-                violations.get(field).add(constraintViolation.getMessage());
+            String fieldName = fieldPath.substring(fieldPath.lastIndexOf(".") + 1);
+            if (invalidFields.containsKey(fieldName)) {
+                invalidFields.get(fieldName).add(constraintViolation.getMessage());
             } else {
-                List<String> messages = new ArrayList<>();
-                messages.add(constraintViolation.getMessage());
-                violations.put(field, messages);
+                List<String> reasons = new ArrayList<>();
+                reasons.add(constraintViolation.getMessage());
+                invalidFields.put(fieldName, reasons);
             }
         });
+        return ValidationExceptionDto.builder()
+                .title("VALIDATION_ERROR")
+                .detail("Ошибка валидации")
+                .status(HttpStatus.BAD_REQUEST.value())
+                .invalidFields(invalidFields)
+                .build();
+    }
 
-        List<ValidationViolation> validationViolations = violations.entrySet().stream().map(entry -> {
-            return new ValidationViolation(
-                    entry.getKey(), entry.getKey() + " was not validated",
-                    entry.getValue());
-        }).toList();
-
-        return new ValidationViolationsResponse(validationViolations);
+    @ExceptionHandler(BaseApiException.class)
+    public ResponseEntity<BaseExceptionDto> onRequestException(BaseApiException e) {
+        return new ResponseEntity<>(BaseExceptionDto.builder()
+                .title(e.getTitle())
+                .detail(e.getDetail())
+                .status(e.getHttpStatus().value())
+                .build(),e.getHttpStatus());
     }
 
 }
