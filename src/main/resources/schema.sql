@@ -3,7 +3,16 @@ CREATE TABLE users (
     username VARCHAR(32) NOT NULL UNIQUE,
     email VARCHAR(254) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    activated BOOLEAN NOT NULL,
     PRIMARY KEY (user_id)
+);
+
+CREATE TABLE verification_tokens (
+    verification_token UUID NOT NULL UNIQUE,
+    user_id INT NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (verification_token),
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE categories (
