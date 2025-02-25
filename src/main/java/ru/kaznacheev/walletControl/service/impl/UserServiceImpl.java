@@ -11,12 +11,14 @@ import ru.kaznacheev.walletControl.entity.User;
 import ru.kaznacheev.walletControl.exception.BaseApiException;
 import ru.kaznacheev.walletControl.repository.UserRepository;
 import ru.kaznacheev.walletControl.service.UserService;
+import ru.kaznacheev.walletControl.service.VerificationTokenService;
 
 @Service
 @Validated
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private final VerificationTokenService verificationTokenService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -43,6 +45,7 @@ public class UserServiceImpl implements UserService {
                 .password(encode(newUserDto.getPassword()))
                 .build();
         userRepository.save(user);
+        verificationTokenService.createVerificationToken(user);
     }
 
     private String encode(String password) {

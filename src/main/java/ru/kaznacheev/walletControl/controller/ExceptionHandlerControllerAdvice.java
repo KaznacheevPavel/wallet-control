@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kaznacheev.walletControl.dto.response.BaseExceptionDto;
-import ru.kaznacheev.walletControl.dto.response.ValidationExceptionDto;
+import ru.kaznacheev.walletControl.dto.response.BaseResponseDto;
+import ru.kaznacheev.walletControl.dto.response.ValidationExceptionResponseDto;
 import ru.kaznacheev.walletControl.exception.BaseApiException;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationExceptionDto onConstraintViolationException(ConstraintViolationException e) {
+    public ValidationExceptionResponseDto onConstraintViolationException(ConstraintViolationException e) {
         Map<String, List<String>> invalidFields = new HashMap<>();
         e.getConstraintViolations().forEach(constraintViolation -> {
             String fieldPath = constraintViolation.getPropertyPath().toString();
@@ -33,7 +33,7 @@ public class ExceptionHandlerControllerAdvice {
                 invalidFields.put(fieldName, reasons);
             }
         });
-        return ValidationExceptionDto.builder()
+        return ValidationExceptionResponseDto.builder()
                 .title("VALIDATION_ERROR")
                 .detail("Ошибка валидации")
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -42,8 +42,8 @@ public class ExceptionHandlerControllerAdvice {
     }
 
     @ExceptionHandler(BaseApiException.class)
-    public ResponseEntity<BaseExceptionDto> onRequestException(BaseApiException e) {
-        return new ResponseEntity<>(BaseExceptionDto.builder()
+    public ResponseEntity<BaseResponseDto> onRequestException(BaseApiException e) {
+        return new ResponseEntity<>(BaseResponseDto.builder()
                 .title(e.getTitle())
                 .detail(e.getDetail())
                 .status(e.getHttpStatus().value())

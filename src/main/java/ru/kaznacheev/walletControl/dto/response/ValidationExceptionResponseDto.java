@@ -9,6 +9,6 @@ import java.util.Map;
 
 @Getter
 @SuperBuilder
-public class ValidationExceptionDto extends BaseExceptionDto {
+public class ValidationExceptionResponseDto extends BaseResponseDto {
     private final Map<String, List<String>> invalidFields;
 }

@@ -19,6 +19,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.authorizeHttpRequests(request -> {
             request.requestMatchers(HttpMethod.POST, "/api/users").not().authenticated();
+            request.requestMatchers(HttpMethod.GET, "/api/tokens").not().authenticated();
             request.anyRequest().authenticated();
         });
         return httpSecurity.build();
