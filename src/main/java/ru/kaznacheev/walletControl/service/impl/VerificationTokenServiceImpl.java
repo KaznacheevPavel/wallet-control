@@ -2,13 +2,12 @@ package ru.kaznacheev.walletControl.service.impl;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.kaznacheev.walletControl.dto.VerificationTokenDto;
 import ru.kaznacheev.walletControl.entity.User;
 import ru.kaznacheev.walletControl.entity.VerificationToken;
-import ru.kaznacheev.walletControl.exception.BaseApiException;
+import ru.kaznacheev.walletControl.exception.ExceptionFactory;
 import ru.kaznacheev.walletControl.repository.VerificationTokenRepository;
 import ru.kaznacheev.walletControl.service.MailSenderService;
 import ru.kaznacheev.walletControl.service.VerificationTokenService;
@@ -42,11 +41,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
                 verificationTokenRepository.findById(UUID.fromString(verificationTokenDto.getToken()));
         if (verificationToken.isEmpty() ||
                 Instant.now().isAfter(verificationToken.get().getCreatedAt().plus(Period.ofDays(1)))) {
-            throw BaseApiException.builder()
-                    .title("INVALID_VERIFICATION_TOKEN")
-                    .detail("Ссылка недействительна или срок ее действия истек")
-                    .httpStatus(HttpStatus.BAD_REQUEST)
-                    .build();
+            throw ExceptionFactory.invalidVerificationToken();
         }
         verificationToken.get().getUser().setActivated(true);
         verificationTokenRepository.delete(verificationToken.get());

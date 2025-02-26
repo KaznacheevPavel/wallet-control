@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @Builder
 public class BaseApiException extends RuntimeException{
-    private String title;
-    private String detail;
-    private HttpStatus httpStatus;
+    private final String title;
+    private final String detail;
+    private final HttpStatus httpStatus;
 }
