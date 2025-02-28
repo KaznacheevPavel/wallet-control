@@ -5,8 +5,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
 
-@SuperBuilder
 @Getter
-public class ResponseWithDataDto extends BaseResponseDto {
-    private final Map<String, String> data;
+@SuperBuilder
+public class ResponseWithData extends BaseResponse {
+    private final Map<String, ?> data;
 }

@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.UUID;
 
 @AllArgsConstructor
 @Getter
-public class VerificationTokenDto {
+public class VerificationTokenRequest {
     @NotBlank(message = "Токен не может быть пустым")
     @UUID(message = "Неверный формат токена")
     private final String token;

@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
 @Builder
 public class BaseApiException extends RuntimeException{
     private final String title;
-    private final String detail;
     private final HttpStatus httpStatus;
+    private final String detail;
 }

@@ -60,4 +60,20 @@ public final class ExceptionFactory {
                 .build();
     }
 
+    public static BaseApiException invalidCategory() {
+        return BaseApiException.builder()
+                .title("INVALID_CATEGORY")
+                .detail("Неверное название категории")
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+    }
+
+    public static BaseApiException userNotFound() {
+        return BaseApiException.builder()
+                .title("USER_NOT_FOUND")
+                .detail("Пользователь не был найден")
+                .httpStatus(HttpStatus.NOT_FOUND)
+                .build();
+    }
+
 }

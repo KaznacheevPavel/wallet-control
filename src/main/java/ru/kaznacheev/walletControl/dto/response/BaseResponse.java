@@ -5,7 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class BaseResponseDto {
+public class BaseResponse {
     private final String title;
     private final int status;
     private final String detail;

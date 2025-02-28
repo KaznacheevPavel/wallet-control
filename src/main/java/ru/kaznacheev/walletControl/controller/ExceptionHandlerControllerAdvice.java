@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.kaznacheev.walletControl.dto.response.BaseResponseDto;
-import ru.kaznacheev.walletControl.dto.response.ValidationExceptionResponseDto;
+import ru.kaznacheev.walletControl.dto.response.BaseResponse;
+import ru.kaznacheev.walletControl.dto.response.ResponseWithData;
 import ru.kaznacheev.walletControl.exception.BaseApiException;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ExceptionHandlerControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationExceptionResponseDto onConstraintViolationException(ConstraintViolationException e) {
+    public ResponseWithData onConstraintViolationException(ConstraintViolationException e) {
         Map<String, List<String>> invalidFields = new HashMap<>();
         e.getConstraintViolations().forEach(constraintViolation -> {
             String fieldPath = constraintViolation.getPropertyPath().toString();
@@ -33,17 +33,17 @@ public class ExceptionHandlerControllerAdvice {
                 invalidFields.put(fieldName, reasons);
             }
         });
-        return ValidationExceptionResponseDto.builder()
+        return ResponseWithData.builder()
                 .title("VALIDATION_ERROR")
                 .detail("Ошибка валидации")
                 .status(HttpStatus.BAD_REQUEST.value())
-                .invalidFields(invalidFields)
+                .data(invalidFields)
                 .build();
     }
 
     @ExceptionHandler(BaseApiException.class)
-    public ResponseEntity<BaseResponseDto> onRequestException(BaseApiException e) {
-        return new ResponseEntity<>(BaseResponseDto.builder()
+    public ResponseEntity<BaseResponse> onRequestException(BaseApiException e) {
+        return new ResponseEntity<>(BaseResponse.builder()
                 .title(e.getTitle())
                 .detail(e.getDetail())
                 .status(e.getHttpStatus().value())

@@ -11,7 +11,7 @@ import ru.kaznacheev.walletControl.validation.constraint.UsernamePattern;
 
 @AllArgsConstructor
 @Getter
-public class NewUserDto {
+public class NewUserRequest {
 
     @NotBlank(message = "Имя пользователя не может быть пустым")
     @Size(min = 6, message = "Имя пользователя должно быть не меньше 6 символов")

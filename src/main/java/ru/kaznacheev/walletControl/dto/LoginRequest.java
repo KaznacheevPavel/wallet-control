@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LoginDto {
+public class LoginRequest {
 
     @NotBlank(message = "Имя пользователя не может быть пустым")
     private final String username;

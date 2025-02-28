@@ -3,8 +3,9 @@ package ru.kaznacheev.walletControl.service.impl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import ru.kaznacheev.walletControl.dto.VerificationTokenDto;
+import ru.kaznacheev.walletControl.dto.VerificationTokenRequest;
 import ru.kaznacheev.walletControl.entity.User;
 import ru.kaznacheev.walletControl.entity.VerificationToken;
 import ru.kaznacheev.walletControl.exception.ExceptionFactory;
@@ -25,6 +26,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final MailSenderService mailSenderService;
     private final VerificationTokenRepository verificationTokenRepository;
 
+    @Transactional
     @Override
     public void createVerificationToken(User user) {
         VerificationToken verificationToken = VerificationToken.builder()
@@ -35,10 +37,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         sendVerificationMail(user.getEmail(), verificationToken.getToken().toString());
     }
 
+    @Transactional
     @Override
-    public void verifyToken(@Valid VerificationTokenDto verificationTokenDto) {
+    public void verifyToken(@Valid VerificationTokenRequest verificationTokenRequest) {
         Optional<VerificationToken> verificationToken =
-                verificationTokenRepository.findById(UUID.fromString(verificationTokenDto.getToken()));
+                verificationTokenRepository.findById(UUID.fromString(verificationTokenRequest.getToken()));
         if (verificationToken.isEmpty() ||
                 Instant.now().isAfter(verificationToken.get().getCreatedAt().plus(Period.ofDays(1)))) {
             throw ExceptionFactory.invalidVerificationToken();

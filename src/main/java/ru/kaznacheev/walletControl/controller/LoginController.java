@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kaznacheev.walletControl.dto.LoginDto;
-import ru.kaznacheev.walletControl.dto.response.ResponseWithDataDto;
+import ru.kaznacheev.walletControl.dto.LoginRequest;
+import ru.kaznacheev.walletControl.dto.response.ResponseWithData;
 import ru.kaznacheev.walletControl.service.LoginService;
 
 import java.util.Map;
@@ -20,9 +20,9 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping
-    public ResponseWithDataDto login(@RequestBody LoginDto loginDto) {
-        String jwt = loginService.login(loginDto);
-        return ResponseWithDataDto.builder()
+    public ResponseWithData login(@RequestBody LoginRequest loginRequest) {
+        String jwt = loginService.login(loginRequest);
+        return ResponseWithData.builder()
                 .title("SUCCESS_AUTHENTICATION")
                 .status(HttpStatus.OK.value())
                 .detail("Аутентификация успешно пройдена")

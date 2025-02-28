@@ -1,8 +1,8 @@
 package ru.kaznacheev.walletControl.service;
 
 import jakarta.validation.Valid;
-import ru.kaznacheev.walletControl.dto.LoginDto;
+import ru.kaznacheev.walletControl.dto.LoginRequest;
 
 public interface LoginService {
-    String login(@Valid LoginDto loginDto);
+    String login(@Valid LoginRequest loginRequest);
 }

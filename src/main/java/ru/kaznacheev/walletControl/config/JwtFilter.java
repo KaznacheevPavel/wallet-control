@@ -23,8 +23,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (jwt != null) {
             DecodedJWT decodedJWT = JwtUtil.verifyJwt(jwt);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null , null);
-            usernamePasswordAuthenticationToken.setAuthenticated(true);
+                    new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(), null, null);
             SecurityContext securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(usernamePasswordAuthenticationToken);
         }

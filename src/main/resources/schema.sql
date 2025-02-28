@@ -31,7 +31,7 @@ CREATE TABLE operations (
     user_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
     amount DECIMAL(12, 2) NOT NULL,
-    description TEXT,
+    description VARCHAR(255),
     created_at TIMESTAMP NOT NULL,
     type operation_type NOT NULL,
     PRIMARY KEY(operation_id),
