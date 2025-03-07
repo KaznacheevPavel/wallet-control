@@ -1,13 +1,14 @@
 package ru.kaznacheev.walletControl.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "categories")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 public class Category {
 
     @Id
