@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.kaznacheev</groupId>
 	<artifactId>walletControl</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>Wallet control</name>
 	<description>Application for control your budget</description>
 	<packaging>jar</packaging>

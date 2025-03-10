@@ -23,6 +23,7 @@ public class OperationController {
     private final OperationService operationService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse createOperation(@RequestBody NewOperationRequest newOperationRequest) {
         operationService.createOperation(newOperationRequest);
         return BaseResponse.builder()
